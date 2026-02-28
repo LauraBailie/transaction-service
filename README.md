@@ -66,7 +66,6 @@ docker build -t transaction-service .
 docker run -p 8080:8080 transaction-service
 
 # Endpoints Overview
-POST/api/auth/loginObtain JWT tokenNoPOST/api/transactionsCreate a transactionYesGET/api/transactionsList all transactionsYesGET/api/transactions/{id}Get transaction by IDYes
 
 | Method              | Endpoint                                 | Description              | Auth?  |
 |---------------------|------------------------------------------|--------------------------|--------|
@@ -74,7 +73,6 @@ POST/api/auth/loginObtain JWT tokenNoPOST/api/transactionsCreate a transactionYe
 | POST                | /api/transactions                        | Create a transaction     | Yes    |
 | GET                 | /api/transactions                        | List all transactions    | Yes    |
 | GET                 | /api/transactions/{id}                   | Get transaction by ID    | Yes    |
-|---------------------|------------------------------------------|--------------------------|--------|
 
 #Authentication Example
 curl -X POST http://localhost:8080/api/auth/login \
