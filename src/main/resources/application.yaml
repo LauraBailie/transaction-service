@@ -26,6 +26,3 @@ springdoc:
     tagsSorter: alpha        # Sort tags alphabetically
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-jwt:
-  secret: 25a1b75736c6d789135f8c59b08726fa  # HS256 key
-  expiration: 900000  # 15 minutes in ms (short for security)
