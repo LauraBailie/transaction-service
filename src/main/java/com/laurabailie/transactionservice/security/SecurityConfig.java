@@ -2,6 +2,8 @@ package com.laurabailie.transactionservice.security;
 
 import java.nio.charset.StandardCharsets;
 
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@SecurityScheme(
+    name = "bearerAuth",                          // ← arbitrary name, used below
+    type = SecuritySchemeType.HTTP,
+    scheme = "bearer",
+    bearerFormat = "JWT",                         // optional but recommended
+    description = "JWT Authorization header using the Bearer scheme."
+)
+
 public class SecurityConfig {
 
     @Value("${jwt.secret}")
