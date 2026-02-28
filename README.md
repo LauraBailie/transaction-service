@@ -64,83 +64,32 @@ docker build -t transaction-service .
 
 # Run container
 docker run -p 8080:8080 transaction-service
-Endpoints Overview
 
-Security Notes
-
-JWT secret configured via jwt.secret (never commit real value!)
-Short-lived tokens (~15 min expiry)
-Stateless (no sessions)
-CSRF disabled (REST API)
-
-Future Enhancements
-
-Refresh token support
-Role-based access control (ADMIN/USER)
-PostgreSQL + Flyway migrations
-Testcontainers for integration tests
-CI/CD with GitHub Actions
-Deploy to Render / Railway
-
-License
-MIT License
-
-Made by Laura Bailie
-Cape Town, South Africa
-GitHub | Email
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Endpoints Overview
 MethodEndpointDescriptionAuth?POST/api/auth/loginObtain JWT tokenNoPOST/api/transactionsCreate a transactionYesGET/api/transactionsList all transactionsYesGET/api/transactions/{id}Get transaction by IDYes
-Authentication Example
-Bashcurl -X POST http://localhost:8080/api/auth/login \
+
+#Authentication Example
+curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "testuser"}'
+
 → Returns {"token": "eyJhbGciOiJIUzI1NiIs..."}
-Create Transaction (with Bearer token)
-Bashcurl -X POST http://localhost:8080/api/transactions \
+
+# Create Transaction (with Bearer token)
+curl -X POST http://localhost:8080/api/transactions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your-token>" \
   -d '{"amount": 1500.00, "currency": "ZAR", "description": "Salary"}'
-Interactive API Docs
+
+# Interactive API Docs
 Open in browser:
 http://localhost:8080/swagger-ui.html
+
 Health Check
 http://localhost:8080/actuator/health → {"status":"UP"}
-Project Structure
-texttransaction-service/
+
+#Project Structure
+transaction-service/
 ├── src/
 │   ├── main/
 │   │   ├── java/.../controller/     REST endpoints
@@ -154,3 +103,26 @@ texttransaction-service/
 ├── Dockerfile                       Docker configuration
 ├── pom.xml                          Maven dependencies
 └── README.md
+
+# Security Notes
+
+JWT secret configured via jwt.secret (never commit real value!)
+Short-lived tokens (~15 min expiry)
+Stateless (no sessions)
+CSRF disabled (REST API)
+
+# Future Enhancements
+
+Refresh token support
+Role-based access control (ADMIN/USER)
+PostgreSQL + Flyway migrations
+Testcontainers for integration tests
+CI/CD with GitHub Actions
+Deploy to Render / Railway
+
+# License
+MIT License
+
+Made by Laura Bailie
+Cape Town, South Africa
+GitHub | Email
