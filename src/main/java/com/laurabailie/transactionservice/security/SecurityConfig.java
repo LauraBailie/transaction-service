@@ -56,7 +56,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     .requestMatchers("/api/auth/**").permitAll()
 
     // Protected
-    .requestMatchers("/api/transactions/**").hasAuthority("USER")  // ← Use hasAuthority("USER")
+    .requestMatchers("/api/transactions/**").authenticated()  // ← Use hasAuthority("USER")
 
     .anyRequest().authenticated()
 )

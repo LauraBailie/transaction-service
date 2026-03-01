@@ -1,27 +1,36 @@
 package com.laurabailie.transactionservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
-@Data  // Lombok for getters/setters
+@Table(name = "transactions")
+@Data
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Positive(message = "Amount must be positive")
-    private Double amount;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @NotBlank(message = "Currency must not be blank")
-    private String currency;
+    @Column(nullable = false)
+    private BigDecimal amount;
+
+    @Column(nullable = false)
+    private String type;  // "INCOME", "EXPENSE", "TRANSFER"
+
+    private String category;  // e.g. "Salary", "Groceries", "Rent", "Entertainment"
 
     private String description;
 
-    private String status = "PROCESSED";  // Default
+    @Column(nullable = false)
+    private LocalDateTime date = LocalDateTime.now();
 
-    private LocalDateTime timestamp = LocalDateTime.now();  // Auto-set
+    // Optional: reference to another transaction for transfers
+    private Long relatedTransactionId;
 }
