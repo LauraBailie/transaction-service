@@ -2,133 +2,87 @@
 
 # Transaction Service API
 
-**A secure, containerised Spring Boot REST API for simulating financial transactions**
+Secure RESTful backend for personal finance tracking  
+User authentication (JWT), transaction CRUD (income/expense/transfer), PostgreSQL + Flyway, clean architecture
 
-[![Java 17](https://img.shields.io/badge/Java-17-blue?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/17/)
-[![Spring Boot 4.0](https://img.shields.io/badge/Spring%20Boot-4.0-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/laurabailie/transaction-service)
-[![Swagger Docs](https://img.shields.io/badge/Swagger-OpenAPI%203.0-brightgreen?logo=swagger)](http://localhost:8080/swagger-ui.html)
+[![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.java.com)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![JWT](https://img.shields.io/badge/JWT-Auth-black?style=for-the-badge&logo=json-web-tokens)](https://jwt.io)
+[![Render Deployed](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render)](https://render.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+**Live Demo**: https://transaction-service-29ts.onrender.com   
+**Swagger UI (local)**: http://localhost:8080/swagger-ui.html
 
 </div>
 
-Secure backend API demonstrating **Spring Boot**, **JWT authentication**, **JPA/Hibernate**, **Swagger documentation**, **unit testing**, and **Docker containerisation** — built as a FinTech-style transaction processor.
+## ✨ Features
 
-## Features
+- **JWT Authentication** — secure registration, login, role-based claims
+- **Transaction Management** — create, list income/expense/transfer entries
+- **Input Validation** — DTOs + Jakarta Bean Validation + clean error responses
+- **Database** — Flyway migrations, PostgreSQL (production), H2 (dev/tests)
+- **Clean Architecture** — layered structure (controllers → services → repositories)
+- **Testing** — unit tests (Mockito), context loading with Flyway integration
+- **Deployment Ready** — Render-friendly with environment variables
 
-- RESTful endpoints for transaction CRUD
-- JWT-based authentication (HS256 symmetric)
-- Input validation & global exception handling
-- In-memory H2 database with auto-schema
-- Layered architecture (Controller → Service → Repository)
-- Interactive Swagger UI (springdoc-openapi)
-- Unit tests (JUnit 5 + Mockito)
-- Dockerised for easy deployment & portability
+## 🛠️ Tech Stack
 
-## Tech Stack
+| Category            | Technology                          |
+|---------------------|-------------------------------------|
+| Language            | Java 17                             |
+| Framework           | Spring Boot 3                       |
+| Security            | Spring Security + JWT               |
+| Persistence         | Spring Data JPA + Hibernate         |
+| Database            | PostgreSQL (prod) / H2 (dev/test)   |
+| Migrations          | Flyway                              |
+| Validation          | Jakarta Bean Validation             |
+| Testing             | JUnit 5 + Mockito                   |
+| Deployment          | Render                              |
+| Documentation       | Springdoc OpenAPI / Swagger UI      |
 
-| Category              | Tools & Technologies                                 |
-|-----------------------|------------------------------------------------------|
-| Language              | Java 17                                              |
-| Framework             | Spring Boot 4.0.3                                    |
-| Security              | Spring Security + OAuth2 Resource Server (JWT)       |
-| Persistence           | Spring Data JPA + H2 (in-memory)                     |
-| Documentation         | springdoc-openapi 3.0+ (Swagger UI)                  |
-| Token Handling        | jjwt 0.12                                            |
-| Testing               | JUnit 5, Mockito                                     |
-| Build & Container     | Maven, Docker                                        |
-| IDE/Tools             | VS Code, Git                                         |
+## 🚀 Quick Start (Local)
 
-## Quick Start
+1. Clone the repository
 
-### Prerequisites
+   ```bash
+   git clone https://github.com/LauraBaillie/transaction-service.git
+   cd transaction-service
 
-- Java 17 (JDK)
-- Maven (or use bundled `./mvnw`)
-- Docker (optional)
+Set environment variables (or create .env file)
+```
+export DB_URL=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+export DB_USERNAME=sa
+export DB_PASSWORD=""
+export JWT_SECRET=super-secret-local-test-key-do-not-use-in-production-abcdefghijklmnopqrstuvwxyz123456
+export JWT_EXPIRATION=86400000   # 24 hours in ms
+```
 
-### Local Development (Maven)
+Build & run
+```
+mvn clean spring-boot:run
+Test endpoints (Postman / curl)
+POST /api/auth/register → { "username": "testuser", "password": "test123" }
+POST /api/auth/login → get JWT token
+POST /api/transactions (with Authorization: Bearer <token>) → create transaction
+GET /api/transactions → list user's transactions
+```
 
-```bash
-# Clone repo
-git clone https://github.com/LauraBailie/transaction-service.git
-cd transaction-service
 
-# Build & run
-mvn clean package
-java -jar target/transaction-service-0.0.1-SNAPSHOT.jar
-Docker (Recommended)
-Bash# Build image
-mvn clean package
-docker build -t transaction-service .
+🧪 Testing
+All tests pass with clean separation:
+Bashmvn clean test
 
-# Run container
-docker run -p 8080:8080 transaction-service
+Unit tests — service layer (Mockito)
+Integration-style — context loading + Flyway migrations in H2
+Coverage — focused on business logic & security mocking
 
-# Endpoints Overview
+🌐 Deployment (Render)
 
-| Method    | Endpoint                     | Description              | Auth?  |
-|-----------|------------------------------|--------------------------|--------|
-| POST      | /api/auth/login              | Obtain JWT token         | No     |
-| POST      | /api/transactions            | Create a transaction     | Yes    |
-| GET       | /api/transactions            | List all transactions    | Yes    |
-| GET       | /api/transactions/{id}       | Get transaction by ID    | Yes    |
-
-#Authentication Example
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "testuser"}'
-
-→ Returns {"token": "eyJhbGciOiJIUzI1NiIs..."}
-
-# Create Transaction (with Bearer token)
-curl -X POST http://localhost:8080/api/transactions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your-token>" \
-  -d '{"amount": 1500.00, "currency": "ZAR", "description": "Salary"}'
-
-# Interactive API Docs
-Open in browser:
-http://localhost:8080/swagger-ui.html
-
-Health Check
-http://localhost:8080/actuator/health → {"status":"UP"}
-
-#Project Structure
-transaction-service/
-├── src/
-│   ├── main/
-│   │   ├── java/.../controller/     REST endpoints
-│   │   ├── java/.../service/        Business logic
-│   │   ├── java/.../repository/     JPA interfaces
-│   │   ├── java/.../model/          Entities
-│   │   ├── java/.../security/       JWT configuration
-│   │   └── resources/
-│   │       └── application.yaml     Config (jwt.secret, etc.)
-│   └── test/                        Unit & integration tests
-├── Dockerfile                       Docker configuration
-├── pom.xml                          Maven dependencies
-└── README.md
-
-# Security Notes
-
-JWT secret configured via jwt.secret (never commit real value!)
-Short-lived tokens (~15 min expiry)
-Stateless (no sessions)
-CSRF disabled (REST API)
-
-# Future Enhancements
-
-Refresh token support
-Role-based access control (ADMIN/USER)
-PostgreSQL + Flyway migrations
-Testcontainers for integration tests
-CI/CD with GitHub Actions
-Deploy to Render / Railway
-
-# License
-MIT License
-
-Made by Laura Bailie
-Cape Town, South Africa
-GitHub | Email
+Connect GitHub repo to Render
+Build command: mvn clean package
+Start command: java -jar target/transaction-service-*.jar
+Set environment variables in Render dashboard:
+DB_URL, DB_USERNAME, DB_PASSWORD (use Render PostgreSQL add-on)
+JWT_SECRET, JWT_EXPIRATION
