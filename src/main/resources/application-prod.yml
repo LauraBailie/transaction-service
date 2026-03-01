@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${DB_URL}                # set in env var on Render
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none  # Important: Flyway handles schema
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
