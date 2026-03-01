@@ -10,9 +10,8 @@ User authentication (JWT), transaction CRUD (income/expense/transfer), PostgreSQ
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
 [![JWT](https://img.shields.io/badge/JWT-Auth-black?style=for-the-badge&logo=json-web-tokens)](https://jwt.io)
 [![Render Deployed](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render)](https://render.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**Live Demo**: https://transaction-service-29ts.onrender.com   
+**Live Demo**: https://transaction-service-29ts.onrender.com  
 **Swagger UI (local)**: http://localhost:8080/swagger-ui.html
 
 </div>
@@ -29,18 +28,18 @@ User authentication (JWT), transaction CRUD (income/expense/transfer), PostgreSQ
 
 ## 🛠️ Tech Stack
 
-| Category            | Technology                          |
-|---------------------|-------------------------------------|
-| Language            | Java 17                             |
-| Framework           | Spring Boot 3                       |
-| Security            | Spring Security + JWT               |
-| Persistence         | Spring Data JPA + Hibernate         |
-| Database            | PostgreSQL (prod) / H2 (dev/test)   |
-| Migrations          | Flyway                              |
-| Validation          | Jakarta Bean Validation             |
-| Testing             | JUnit 5 + Mockito                   |
-| Deployment          | Render                              |
-| Documentation       | Springdoc OpenAPI / Swagger UI      |
+| Category      | Technology                        |
+| ------------- | --------------------------------- |
+| Language      | Java 17                           |
+| Framework     | Spring Boot 3                     |
+| Security      | Spring Security + JWT             |
+| Persistence   | Spring Data JPA + Hibernate       |
+| Database      | PostgreSQL (prod) / H2 (dev/test) |
+| Migrations    | Flyway                            |
+| Validation    | Jakarta Bean Validation           |
+| Testing       | JUnit 5 + Mockito                 |
+| Deployment    | Render                            |
+| Documentation | Springdoc OpenAPI / Swagger UI    |
 
 ## 🚀 Quick Start (Local)
 
@@ -50,39 +49,42 @@ User authentication (JWT), transaction CRUD (income/expense/transfer), PostgreSQ
    git clone https://github.com/LauraBaillie/transaction-service.git
    cd transaction-service
 
-Set environment variables (or create .env file)
-```
-export DB_URL=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-export DB_USERNAME=sa
-export DB_PASSWORD=""
-export JWT_SECRET=super-secret-local-test-key-do-not-use-in-production-abcdefghijklmnopqrstuvwxyz123456
-export JWT_EXPIRATION=86400000   # 24 hours in ms
-```
+   ```
 
-Build & run
-```
-mvn clean spring-boot:run
-Test endpoints (Postman / curl)
-POST /api/auth/register → { "username": "testuser", "password": "test123" }
-POST /api/auth/login → get JWT token
-POST /api/transactions (with Authorization: Bearer <token>) → create transaction
-GET /api/transactions → list user's transactions
-```
+2. Set environment variables (or create .env file)
 
+  ```
+    export DB_URL=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    export DB_USERNAME=sa
+    export DB_PASSWORD=""
+    export JWT_SECRET=super-secret-local-test-key-do-not-use-in-production-abcdefghijklmnopqrstuvwxyz123456
+    export JWT_EXPIRATION=86400000   # 24 hours in ms
+  ```
+
+3. Build & run
+
+  ```
+    mvn clean spring-boot:run
+    Test endpoints (Postman / curl)
+    POST /api/auth/register → { "username": "testuser", "password": "test123" }
+    POST /api/auth/login → get JWT token
+    POST /api/transactions (with Authorization: Bearer <token>) → create transaction
+    GET /api/transactions → list user's transactions
+  ```
 
 🧪 Testing
 All tests pass with clean separation:
 Bashmvn clean test
 
-Unit tests — service layer (Mockito)
-Integration-style — context loading + Flyway migrations in H2
-Coverage — focused on business logic & security mocking
+- Unit tests — service layer (Mockito)
+- Integration-style — context loading + Flyway migrations in H2
+- Coverage — focused on business logic & security mocking
 
 🌐 Deployment (Render)
 
-Connect GitHub repo to Render
-Build command: mvn clean package
-Start command: java -jar target/transaction-service-*.jar
-Set environment variables in Render dashboard:
-DB_URL, DB_USERNAME, DB_PASSWORD (use Render PostgreSQL add-on)
-JWT_SECRET, JWT_EXPIRATION
+1. Connect GitHub repo to Render
+2. Build command: mvn clean package
+3. Start command: java -jar target/transaction-service-\*.jar
+4. Set environment variables in Render dashboard:
+   - DB_URL, DB_USERNAME, DB_PASSWORD (use Render PostgreSQL add-on)
+   - JWT_SECRET, JWT_EXPIRATION

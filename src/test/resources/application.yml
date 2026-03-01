@@ -2,6 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      generate-ddl: false
   flyway:
     enabled: true
     baseline-on-migrate: true
