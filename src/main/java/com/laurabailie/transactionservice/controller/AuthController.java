@@ -1,9 +1,12 @@
 package com.laurabailie.transactionservice.controller;
 
+import com.laurabailie.transactionservice.dto.LoginRequest;
+import com.laurabailie.transactionservice.dto.RegisterRequest;
 import com.laurabailie.transactionservice.model.User;
 import com.laurabailie.transactionservice.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,23 +33,14 @@ public class AuthController {
     @Value("${jwt.expiration}")
     private long expirationMs;
 
-    // Constructor injection (best practice)
     public AuthController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-
-        if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Username and password are required");
-        }
-
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            userService.register(username.trim(), password.trim());
+            userService.register(request.getUsername().trim(), request.getPassword().trim());
             return ResponseEntity.ok("User registered successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -54,24 +48,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-
-        if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Username and password are required");
-        }
-
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
-            User user = userService.login(username.trim(), password.trim());
+            User user = userService.login(request.getUsername().trim(), request.getPassword().trim());
 
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
             Instant now = Instant.now();
             String token = Jwts.builder()
                     .subject(user.getUsername())
-                    .claim("roles", user.getRole())           // Now comes from database!
+                    .claim("roles", user.getRole())
                     .issuedAt(Date.from(now))
                     .expiration(Date.from(now.plus(expirationMs, ChronoUnit.MILLIS)))
                     .signWith(key)
