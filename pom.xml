@@ -128,18 +128,24 @@
     <scope>runtime</scope>
 </dependency>
 
-<!-- Flyway for database migrations -->
-<dependency>
+<!-- Flyway core -->
+  <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-</dependency>
+  </dependency>
 
-<!-- PostgreSQL driver (runtime only) -->
-<dependency>
+  <!-- PostgreSQL support (important for Postgres 16+) -->
+  <dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-database-postgresql</artifactId>
+  </dependency>
+
+  <!-- PostgreSQL driver -->
+  <dependency>
     <groupId>org.postgresql</groupId>
     <artifactId>postgresql</artifactId>
     <scope>runtime</scope>
-</dependency>
+  </dependency>
 
 	</dependencies>
 
